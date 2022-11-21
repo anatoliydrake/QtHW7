@@ -28,12 +28,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-    QGraphicsView::viewport()->grabMouse();
+    //QGraphicsView::viewport()->grabMouse();
     if (event->button() == Qt::LeftButton)
     {
-        addNew();
+        Blockscheme* block = new Blockscheme(this);
+        connect(block, SIGNAL(reDraw()), this, SLOT(reDraw()));
+        block->setPos(event->pos().x(), event->pos().y());
+        block->setFlags(QGraphicsItem::ItemIsMovable);
+        scene->addItem(block);
+        //addNew();
     }
-    QGraphicsView::viewport()->releaseMouse();
+    //QGraphicsView::viewport()->releaseMouse();
 }
 
 void MainWindow::reDraw()
@@ -57,6 +62,7 @@ void MainWindow::addNew()
 {
     Blockscheme* block = new Blockscheme(this);
     block->setPos(0, 0);
+    block->setFlags(QGraphicsItem::ItemIsMovable);
     scene->addItem(block);
 }
 
